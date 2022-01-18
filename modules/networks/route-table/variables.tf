@@ -1,7 +1,13 @@
-variable "route_table_name" {
-  description = "route table name" 
+variable "igw_route_table_name" {
+  description = "internet gateway route table name" 
   type = string
 }
+
+variable "nat_route_table_name" {
+  description = "nat gateway route table name" 
+  type = string
+}
+
 
 variable "vpc_name" {
   description = "vpc name" 

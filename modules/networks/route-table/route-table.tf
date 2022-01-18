@@ -40,7 +40,7 @@ resource "aws_route_table" "internet_gateway" {
   tags = merge(
 		var.route_table_tags,
 		{
-      Name = var.route_table_name
+      Name = var.igw_route_table_name
 		}
   )
 }
@@ -64,7 +64,7 @@ resource "aws_route_table" "nat_gateway" {
   tags = merge(
 		var.route_table_tags,
 		{
-      Name = var.route_table_name
+      Name = var.nat_route_table_name
 		}
   )
 }
