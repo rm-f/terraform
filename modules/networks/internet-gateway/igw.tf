@@ -1,15 +1,5 @@
-data "aws_vpc" "current" {
-  tags = {
-    Name = var.vpc_name
-  }
-}
-
-output "output_vpc_id" {
-    value = data.aws_vpc.current.id
-}
-
 resource "aws_internet_gateway" "gw" {
-  vpc_id     = data.aws_vpc.current.id
+  vpc_id = var.vpc_id 
 
   tags =  merge(
 		var.gateway_tags,
@@ -17,4 +7,7 @@ resource "aws_internet_gateway" "gw" {
       Name = var.gateway_name
 		}
   )
+}
+output "igw_id" {
+  value = aws_internet_gateway.gw.id
 }

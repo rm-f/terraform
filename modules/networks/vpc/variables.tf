@@ -3,6 +3,11 @@ variable "vpc_name" {
   type = string
 }
 
+variable "enable_dns_hostnames" {
+  description = "enable dns hostnames" 
+  type = bool
+}
+
 variable "vpc_cidr_block" {
   description = "vpc cidr block" 
   type = string

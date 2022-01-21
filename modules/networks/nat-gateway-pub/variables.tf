@@ -1,10 +1,5 @@
-variable "subnet_name" {
-  description = "subnet name" 
-  type = string
-}
-
-variable "internet_gateway_name" {
-  description = "internet gateway name" 
+variable "subnet_id" {
+  description = "subnet id" 
   type = string
 }
 
