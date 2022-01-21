@@ -8,33 +8,33 @@ variable "nat_route_table_name" {
   type = string
 }
 
-
-variable "vpc_name" {
-  description = "vpc name" 
+variable "vpc_id" {
+  description = "vpc id" 
   type = string
 }
 
-variable "igw_subnet_name" {
-  description = "internet gateway subnet name" 
+variable "igw_subnet_id" {
+  description = "internet gateway subnet id" 
   type = string
 }
 
-variable "natgw_subnet_name" {
-  description = "nat gateway subnet" 
+variable "natgw_subnet_id" {
+  description = "nat gateway id" 
   type = string
 }
 
 variable "cidr_block" {
   description = "cidr block"
+  type = string
 }
 
-variable "internet_gateway_names" {
-  description = "internet gateway name" 
+variable "internet_gateway_ids" {
+  description = "internet gateway id list" 
   type = list(string)
 }
 
-variable "nat_gateway_names" {
-  description = "nat gateway name" 
+variable "nat_gateway_ids" {
+  description = "nat gateway id list" 
   type = list(string)
 }
 

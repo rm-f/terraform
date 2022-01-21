@@ -1,22 +1,10 @@
-data "aws_subnet" "selected" {
-  tags = {
-    Name = var.subnet_name
-  }
-}
-
-data "aws_internet_gateway" "selected" {
-  tags = {
-    Name = var.internet_gateway_name
-  }
-}
-
 resource "aws_eip" "nat_eip" {
   vpc = true
 }
 
 resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = data.aws_subnet.selected.id
+  subnet_id     = var.subnet_id
   connectivity_type = var.connectivity_type
   tags =  merge(
 		var.gateway_tags,
@@ -24,4 +12,8 @@ resource "aws_nat_gateway" "nat_gateway" {
       Name = var.nat_gateway_name
 		}
   )
+}
+
+output "natgw_id" {
+  value = aws_nat_gateway.nat_gateway.id
 }

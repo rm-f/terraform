@@ -1,40 +1,10 @@
-data "aws_vpc" "current" {
-  tags = {
-    Name = var.vpc_name
-  }
-}
-
-output "output_vpc_id" {
-    value = data.aws_vpc.current.id
-}
-
-data "aws_subnet" "igw_subnet" {
-  tags = {
-    Name = var.igw_subnet_name
-  }
-}
-
-data "aws_subnet" "natgw_subnet" {
-  tags = {
-    Name = var.natgw_subnet_name
-  }
-}
-
-
-data "aws_internet_gateway" "igws"{
-  count = length(var.internet_gateway_names)
-  tags = {
-    Name = var.internet_gateway_names[count.index]
-  } 
-}
-
 resource "aws_route_table" "internet_gateway" {
-  count = length(var.internet_gateway_names)
-  vpc_id = data.aws_vpc.current.id
+  count = length(var.internet_gateway_ids)
+  vpc_id = var.vpc_id
 
   route {
     cidr_block = var.cidr_block
-    gateway_id = data.aws_internet_gateway.igws[count.index].id
+    gateway_id = var.internet_gateway_ids[count.index]
   }
 
   tags = merge(
@@ -45,20 +15,23 @@ resource "aws_route_table" "internet_gateway" {
   )
 }
 
-data "aws_nat_gateway" "natgws"{
-  count = length(var.nat_gateway_names)
-  tags = {
-    Name = var.nat_gateway_names[count.index]
-  } 
+output "igw_route_table_id" {
+  value = aws_route_table.internet_gateway
+}
+
+resource "aws_route_table_association" "association_igw" {
+  count = length(var.internet_gateway_ids)
+  subnet_id      = var.igw_subnet_id
+  route_table_id = aws_route_table.internet_gateway[count.index].id
 }
 
 resource "aws_route_table" "nat_gateway" {
-  count = length(var.nat_gateway_names)
-  vpc_id = data.aws_vpc.current.id
+  count = length(var.nat_gateway_ids)
+  vpc_id = var.vpc_id
 
   route {
     cidr_block = var.cidr_block
-    gateway_id = data.aws_nat_gateway.natgws[count.index].id
+    gateway_id = var.nat_gateway_ids[count.index]
   }
 
   tags = merge(
@@ -69,15 +42,13 @@ resource "aws_route_table" "nat_gateway" {
   )
 }
 
-resource "aws_route_table_association" "association_igw" {
-  count = length(var.internet_gateway_names)
-  subnet_id      = data.aws_subnet.igw_subnet.id
-  route_table_id = aws_route_table.internet_gateway[count.index].id
+output "natgw_route_table_id" {
+  value = aws_route_table.nat_gateway
 }
 
 resource "aws_route_table_association" "association_natgw" {
-  count = length(var.nat_gateway_names)
-  subnet_id      = data.aws_subnet.natgw_subnet.id
+  count = length(var.nat_gateway_ids)
+  subnet_id      = var.natgw_subnet_id
   route_table_id = aws_route_table.nat_gateway[count.index].id
 }
 
